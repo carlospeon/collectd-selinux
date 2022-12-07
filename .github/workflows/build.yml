@@ -1,0 +1,51 @@
+name: RPM Build
+
+env:
+  version: ${{github.ref_name}}
+  release: 1
+  draft: true
+
+on:
+  push:
+    tags:
+    - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+
+    - name: build RPM package
+      id: buildrpm7
+      uses: carlospeon/buildrpm@centos7
+      with:
+        spec: collectd-selinux.spec
+        version: ${{ env.version }}
+        release: ${{ env.release }}
+
+    - name: build RPM package
+      id: buildrpm8
+      uses: carlospeon/buildrpm@rocky8
+      with:
+        spec: collectd-selinux.spec
+        version: ${{ env.version }}
+        release: ${{ env.release }}
+
+    - name: build RPM package
+      id: buildrpm9
+      uses: carlospeon/buildrpm@rocky9
+      with:
+        spec: collectd-selinux.spec
+        version: ${{ env.version }}
+        release: ${{ env.release }}
+
+    - uses: ncipollo/release-action@v1
+      with:
+        name: collectd-selinux-${{ env.version }}
+        artifacts: ${{ steps.buildrpm7.outputs.rpms_path }}/noarch/*.el7.noarch.rpm,${{ steps.buildrpm8.outputs.rpms_path }}/noarch/*.el8.noarch.rpm,${{ steps.buildrpm9.outputs.rpms_path }}/noarch/*.el9.noarch.rpm
+        artifactContentType: application/x-rpm
+        replacesArtifacts: true
+        allowUpdates: true
+        draft: ${{ env.draft }}
