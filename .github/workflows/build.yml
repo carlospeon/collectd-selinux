@@ -1,6 +1,7 @@
 name: RPM Build
 
 env:
+  name: collectd-selinux
   version: ${{github.ref_name}}
   release: 1
   draft: true
@@ -21,7 +22,7 @@ jobs:
       id: buildrpm7
       uses: carlospeon/buildrpm@centos7
       with:
-        spec: collectd-selinux.spec
+        spec: contrib/${{ env.name }}.spec
         version: ${{ env.version }}
         release: ${{ env.release }}
 
@@ -29,7 +30,7 @@ jobs:
       id: buildrpm8
       uses: carlospeon/buildrpm@rocky8
       with:
-        spec: collectd-selinux.spec
+        spec: contrib/${{ env.name }}.spec
         version: ${{ env.version }}
         release: ${{ env.release }}
 
@@ -37,13 +38,13 @@ jobs:
       id: buildrpm9
       uses: carlospeon/buildrpm@rocky9
       with:
-        spec: collectd-selinux.spec
+        spec: contrib/${{ env.name }}.spec
         version: ${{ env.version }}
         release: ${{ env.release }}
 
     - uses: ncipollo/release-action@v1
       with:
-        name: collectd-selinux-${{ env.version }}
+        name: ${{ env.name }}-${{ env.version }}
         artifacts: ${{ steps.buildrpm7.outputs.rpms_path }}/noarch/*.el7.noarch.rpm,${{ steps.buildrpm8.outputs.rpms_path }}/noarch/*.el8.noarch.rpm,${{ steps.buildrpm9.outputs.rpms_path }}/noarch/*.el9.noarch.rpm
         artifactContentType: application/x-rpm
         replacesArtifacts: true
