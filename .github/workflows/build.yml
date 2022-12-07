@@ -27,6 +27,9 @@ jobs:
         version: ${{ env.version }}
         release: ${{ env.release }}
         arch: ${{ env.arch }}
+    - name: copy rpms
+      run: |
+        cp ${{ steps.buildrpm7.outputs.rpms_path }}/noarch/*.el7.noarch.rpm .
 
     - name: build RPM package
       id: buildrpm8
@@ -36,6 +39,9 @@ jobs:
         version: ${{ env.version }}
         release: ${{ env.release }}
         arch: ${{ env.arch }}
+    - name: copy rpms
+      run: |
+        cp ${{ steps.buildrpm8.outputs.rpms_path }}/noarch/*.el8.noarch.rpm .
 
     - name: build RPM package
       id: buildrpm9
@@ -45,11 +51,14 @@ jobs:
         version: ${{ env.version }}
         release: ${{ env.release }}
         arch: ${{ env.arch }}
+    - name: copy rpms
+      run: |
+        cp ${{ steps.buildrpm9.outputs.rpms_path }}/noarch/*.el9.noarch.rpm .
 
     - uses: ncipollo/release-action@v1
       with:
         name: ${{ env.name }}-${{ env.version }}
-        artifacts: ${{ steps.buildrpm7.outputs.rpms_path }}/noarch/*.el7.noarch.rpm,${{ steps.buildrpm8.outputs.rpms_path }}/noarch/*.el8.noarch.rpm,${{ steps.buildrpm9.outputs.rpms_path }}/noarch/*.el9.noarch.rpm
+        artifacts: "${{ env.name }}-*.noarch.rpm"
         artifactContentType: application/x-rpm
         replacesArtifacts: true
         allowUpdates: true
