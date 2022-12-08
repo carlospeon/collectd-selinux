@@ -2,9 +2,7 @@ name: RPM Build
 
 env:
   name: collectd-selinux
-  version: ${{github.ref_name}}
-  release: 1
-  arch: noarch
+  version: ${{ github.ref_name }}
   draft: true
 
 on:
@@ -25,11 +23,9 @@ jobs:
       with:
         spec: contrib/${{ env.name }}.spec
         version: ${{ env.version }}
-        release: ${{ env.release }}
-        arch: ${{ env.arch }}
-    - name: copy rpms
-      run: |
-        cp ${{ steps.buildrpm7.outputs.rpms_path }}/noarch/*.el7.noarch.rpm .
+    # - name: copy rpms
+    #   run: |
+    #     cp ${{ steps.buildrpm7.outputs.rpms_path }}/noarch/*.el7.noarch.rpm .
 
     - name: build RPM package
       id: buildrpm8
@@ -37,11 +33,9 @@ jobs:
       with:
         spec: contrib/${{ env.name }}.spec
         version: ${{ env.version }}
-        release: ${{ env.release }}
-        arch: ${{ env.arch }}
-    - name: copy rpms
-      run: |
-        cp ${{ steps.buildrpm8.outputs.rpms_path }}/noarch/*.el8.noarch.rpm .
+    # - name: copy rpms
+    #   run: |
+    #     cp ${{ steps.buildrpm8.outputs.rpms_path }}/noarch/*.el8.noarch.rpm .
 
     - name: build RPM package
       id: buildrpm9
@@ -49,16 +43,14 @@ jobs:
       with:
         spec: contrib/${{ env.name }}.spec
         version: ${{ env.version }}
-        release: ${{ env.release }}
-        arch: ${{ env.arch }}
-    - name: copy rpms
-      run: |
-        cp ${{ steps.buildrpm9.outputs.rpms_path }}/noarch/*.el9.noarch.rpm .
+    # - name: copy rpms
+    #   run: |
+    #     cp ${{ steps.buildrpm9.outputs.rpms_path }}/noarch/*.el9.noarch.rpm .
 
     - uses: ncipollo/release-action@v1
       with:
         name: ${{ env.name }}-${{ env.version }}
-        artifacts: "${{ env.name }}-*.noarch.rpm"
+        artifacts: "${{ steps.buildrpm7.outputs.rpms_path }}/noarch/*.el7.noarch.rpm,${{ steps.buildrpm8.outputs.rpms_path }}/noarch/*.el8.noarch.rpm,${{ steps.buildrpm9.outputs.rpms_path }}/noarch/*.el9.noarch.rpm"
         artifactContentType: application/x-rpm
         replacesArtifacts: true
         allowUpdates: true

@@ -16,12 +16,12 @@
 # Package information
 Name:			collectd-selinux
 Version:		%{?version}
-Release:		%{?release}%{?dist}
+Release:		1%{?dist}
 Source0:		%{name}-%{version}.tar.gz
 License:		GPLv2
 Group:			System Environment/Base
 Summary:		SELinux Policies for collectd
-#BuildArch:		noarch
+BuildArch:		noarch
 URL:			https://HOSTNAME
 Requires(post):	selinux-policy-base, selinux-policy-targeted
 BuildRequires:	selinux-policy selinux-policy-devel
