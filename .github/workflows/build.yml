@@ -50,7 +50,10 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         name: ${{ env.name }}-${{ env.version }}
-        artifacts: "${{ steps.buildrpm7.outputs.rpms_path }}/noarch/*.el7.noarch.rpm,${{ steps.buildrpm8.outputs.rpms_path }}/noarch/*.el8.noarch.rpm,${{ steps.buildrpm9.outputs.rpms_path }}/noarch/*.el9.noarch.rpm"
+        artifacts: "\
+          ${{ steps.buildrpm7.outputs.rpms_path }}/noarch/*.el7.noarch.rpm,\
+          ${{ steps.buildrpm8.outputs.rpms_path }}/noarch/*.el8.noarch.rpm,\
+          ${{ steps.buildrpm9.outputs.rpms_path }}/noarch/*.el9.noarch.rpm"
         artifactContentType: application/x-rpm
         replacesArtifacts: true
         allowUpdates: true
