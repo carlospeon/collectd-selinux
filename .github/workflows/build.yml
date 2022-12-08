@@ -23,9 +23,6 @@ jobs:
       with:
         spec: contrib/${{ env.name }}.spec
         version: ${{ env.version }}
-    # - name: copy rpms
-    #   run: |
-    #     cp ${{ steps.buildrpm7.outputs.rpms_path }}/noarch/*.el7.noarch.rpm .
 
     - name: build RPM package
       id: buildrpm8
@@ -33,9 +30,6 @@ jobs:
       with:
         spec: contrib/${{ env.name }}.spec
         version: ${{ env.version }}
-    # - name: copy rpms
-    #   run: |
-    #     cp ${{ steps.buildrpm8.outputs.rpms_path }}/noarch/*.el8.noarch.rpm .
 
     - name: build RPM package
       id: buildrpm9
@@ -43,9 +37,6 @@ jobs:
       with:
         spec: contrib/${{ env.name }}.spec
         version: ${{ env.version }}
-    # - name: copy rpms
-    #   run: |
-    #     cp ${{ steps.buildrpm9.outputs.rpms_path }}/noarch/*.el9.noarch.rpm .
 
     - uses: ncipollo/release-action@v1
       with:
