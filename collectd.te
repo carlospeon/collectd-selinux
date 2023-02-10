@@ -169,6 +169,17 @@ optional_policy(`
     varnishd_read_lib_files(collectd_t)
 ')
 
+# allow exec plugin run over unconfined_t
+optional {
+    require {
+        type unconfined_t;
+        type var_t;
+    }
+    domain_auto_trans(collectd_t, bin_t, unconfined_t);
+    allow collectd_t bin_t:file entrypoint;
+    allow collectd_t var_t:file getattr;
+    role system_r types unconfined_t;
+}
 
 ########################################
 #
