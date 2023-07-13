@@ -169,6 +169,16 @@ optional_policy(`
     varnishd_read_lib_files(collectd_t)
 ')
 
+optional {
+    require {
+        type varnishd_var_lib_t;
+        class dir read;
+        class file map;
+    }
+    allow collectd_t varnishd_var_lib_t:dir read;
+    allow collectd_t varnishd_var_lib_t:file map;
+}
+
 # allow exec plugin run over unconfined_t
 optional {
     require {
