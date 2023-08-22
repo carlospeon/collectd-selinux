@@ -191,6 +191,15 @@ optional {
     role system_r types unconfined_t;
 }
 
+# allow interface plugin open proc links
+optional {
+    require {
+        type proc_net_t;
+        class lnk_file read;
+    }
+    allow collectd_t proc_net_t:lnk_file read;
+}
+
 ########################################
 #
 # Web collectd local policy
