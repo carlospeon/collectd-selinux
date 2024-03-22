@@ -169,6 +169,7 @@ optional_policy(`
     varnishd_read_lib_files(collectd_t)
 ')
 
+# varnish
 optional {
     require {
         type varnishd_var_lib_t;
@@ -177,6 +178,35 @@ optional {
     }
     allow collectd_t varnishd_var_lib_t:dir read;
     allow collectd_t varnishd_var_lib_t:file map;
+}
+
+# dbi
+optional {
+    require {
+      type var_t;
+      type initrc_t;
+      type default_t;
+      class sem { associate read unix_read unix_write write };
+      class msgq { associate read unix_read unix_write write };
+      class msg { receive send };
+      class shm { associate getattr read unix_read unix_write write };
+      class file { execute getattr lock map open read };
+      class lnk_file { getattr read };
+      class dir write;
+      class capability ipc_owner;
+    }
+    allow collectd_t default_t:dir write;
+
+    allow collectd_t default_t:file map;
+    allow collectd_t default_t:file { execute getattr lock open read };
+    allow collectd_t default_t:lnk_file { getattr read };
+    allow collectd_t initrc_t:msg { receive send };
+    allow collectd_t initrc_t:msgq { associate read unix_read unix_write write };
+    allow collectd_t initrc_t:sem { associate read unix_read unix_write write };
+
+    allow collectd_t initrc_t:shm { associate getattr read unix_read unix_write write };
+    allow collectd_t self:capability ipc_owner;
+    allow collectd_t var_t:file { lock open read };
 }
 
 # allow exec plugin run over unconfined_t
